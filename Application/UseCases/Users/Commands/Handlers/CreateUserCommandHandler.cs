@@ -1,10 +1,11 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.Users.Commands.Requests;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Users.Commands.Handlers;
 
 public class CreateUserCommandHandler(
     IUserReadRepository userReadRepository,

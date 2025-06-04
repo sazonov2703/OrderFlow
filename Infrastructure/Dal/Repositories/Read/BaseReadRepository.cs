@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Dal.Repositories.Read;
 
-public abstract class BaseReadRepository<T>(DbContext context) : IReadRepository<T> where T : class
+public abstract class BaseReadRepository<T>(DbContext context) 
+    : IReadRepository<T> where T : class
 {
     protected readonly DbContext _context = context;
     private readonly DbSet<T> _dbSet = context.Set<T>();

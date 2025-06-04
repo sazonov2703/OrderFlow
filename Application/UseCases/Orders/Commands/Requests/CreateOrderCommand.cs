@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Orders.Commands.Requests;
 
 public record CreateOrderCommand(
     Guid WorkspaceId,

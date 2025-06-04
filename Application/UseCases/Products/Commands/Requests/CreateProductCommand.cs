@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Products.Commands.Requests;
 
 public record CreateProductCommand(
     Guid WorkspaceId, 

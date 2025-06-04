@@ -1,9 +1,10 @@
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.Products.Commands.Requests;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Products.Commands.Handlers;
 
 public class CreateProductCommandHandler(
     IProductWriteRepository productWriteRepository, 

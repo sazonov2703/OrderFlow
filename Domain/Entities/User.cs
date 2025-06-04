@@ -66,6 +66,8 @@ public class User : BaseEntity<User>
     /// </summary>
     public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
     
+    public List<ExternalLogin> ExternalLogins { get; private set; }
+    
     #endregion
     
     #endregion

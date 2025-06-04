@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Domain.Events;
 using Domain.Validators;
 using Domain.ValueObjects;
@@ -29,6 +28,8 @@ public class Order : BaseEntity<Order>
     /// <param name="shippingAddress">Shipping address</param>
     /// <param name="shippingCost">Shipping cost</param>
     /// <param name="orderDeadline">Deadline</param>
+    /// <param name="description">Description</param>
+    /// <param name="deadline">Deadline</param>
     public Order(
         Workspace workspace, 
         List<OrderItem> orderItems,

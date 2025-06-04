@@ -1,7 +1,6 @@
-using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Users.Commands.Requests;
 
 public record CreateUserCommand(
     string Username, 

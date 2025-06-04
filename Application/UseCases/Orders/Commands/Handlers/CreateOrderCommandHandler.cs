@@ -1,12 +1,13 @@
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.Orders.Commands.Requests;
 using Domain.Entities;
 using Domain.ValueObjects;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Orders.Commands.Handlers;
 
-public class CreateOrderCommandHnadler(
+public class CreateOrderCommandHandler(
     IWorkspaceReadRepository workspaceReadRepository,
     IOrderWriteRepository orderWriteRepository,
     ICustomerReadRepository customerReadRepository,

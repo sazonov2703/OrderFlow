@@ -1,9 +1,10 @@
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.Customers.Commands.Requests;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.Customers.Commands.Handlers;
 
 public class CreateCustomerCommandHandler(
     IWorkspaceReadRepository workspaceReadRepository,

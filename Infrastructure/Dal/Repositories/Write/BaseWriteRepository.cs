@@ -3,7 +3,8 @@ using Application.Interfaces.Repositories;
 
 namespace Infrastructure.Dal.Repositories.Write;
 
-public abstract class BaseWriteRepository<T>(DbContext context) : IWriteRepository<T> where T : class
+public abstract class BaseWriteRepository<T>(DbContext context) 
+    : IWriteRepository<T> where T : class
 {
     protected readonly DbContext _context = context;
     private readonly DbSet<T> _dbSet = context.Set<T>();

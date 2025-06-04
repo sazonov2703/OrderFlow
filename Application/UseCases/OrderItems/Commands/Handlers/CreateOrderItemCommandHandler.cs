@@ -1,9 +1,10 @@
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.OrderItems.Commands.Requests;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.Commands;
+namespace Application.UseCases.OrderItems.Commands.Handlers;
 
 public class CreateOrderItemCommandHandler(
     IOrderItemWriteRepository orderItemWriteRepository,

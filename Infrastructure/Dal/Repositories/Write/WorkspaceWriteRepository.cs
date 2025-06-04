@@ -3,7 +3,8 @@ using Domain.Entities;
 
 namespace Infrastructure.Dal.Repositories.Write;
 
-public class WorkspaceWriteRepository(OrderFlowDbContext context) : BaseWriteRepository<Workspace>(context), IWorkspaceWriteRepository
+public class WorkspaceWriteRepository(OrderFlowDbContext context) 
+    : BaseWriteRepository<Workspace>(context), IWorkspaceWriteRepository
 {
     
 }
