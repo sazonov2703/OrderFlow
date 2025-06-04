@@ -3,8 +3,8 @@ using MediatR;
 
 namespace Application.UseCases.Commands;
 
-public record CreateUserCommand(
-    string Username, 
-    string Email, 
-    string Password
+public record CreateOrderItemCommand(
+    Guid OrderId,
+    Guid ProductId,
+    int Quantity
     ) : IRequest<Guid>;

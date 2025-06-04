@@ -8,8 +8,13 @@ public class ShippingAddress : BaseValueObject
     
     
     public ShippingAddress(
-        string recipentName, string country, string city, string street,
-        string houseNumber, string flatNumber, string zipCode
+        string recipentName, 
+        string country, 
+        string city, 
+        string street,
+        string houseNumber, 
+        string flatNumber, 
+        string zipCode
         )
     {
         RecipentName = recipentName;

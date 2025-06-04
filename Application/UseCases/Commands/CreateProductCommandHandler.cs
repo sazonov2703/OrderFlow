@@ -6,8 +6,9 @@ using MediatR;
 namespace Application.UseCases.Commands;
 
 public class CreateProductCommandHandler(
-    IProductWriteRepository productWriteRepository, IWorkspaceReadRepository workspaceReadRepository
-) : IRequestHandler<CreateProductCommand, Guid>
+    IProductWriteRepository productWriteRepository, 
+    IWorkspaceReadRepository workspaceReadRepository
+    ) : IRequestHandler<CreateProductCommand, Guid>
 {
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -15,7 +16,12 @@ public class CreateProductCommandHandler(
         
         if (workspace == null) throw new InvalidOperationException($"Workspace {request.WorkspaceId} does not exist");
 
-        var product = new Product(workspace, request.Name, request.Description, request.UnitPrice);
+        var product = new Product(
+            workspace, 
+            request.Name, 
+            request.Description, 
+            request.UnitPrice
+            );
         
         await productWriteRepository.AddAsync(product, cancellationToken);
         

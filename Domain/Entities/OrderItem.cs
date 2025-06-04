@@ -12,7 +12,25 @@ public class OrderItem : BaseEntity<OrderItem>
         
     }
 
-    
+    public OrderItem(
+        Product product,
+        Order order,
+        int quantity
+        )
+    {
+        Product = product;
+        ProductId = product.Id;
+        Order = order;
+        OrderId = order.Id;
+        ProductName = product.Name;
+        ProductUnitPrice = product.UnitPrice;
+        Quantity = quantity;
+        
+        TotalPrice = ProductUnitPrice * Quantity;
+        
+        //ValidateEntity();
+        //AddDomainEvent();
+    }
     
     #endregion
     
@@ -22,6 +40,11 @@ public class OrderItem : BaseEntity<OrderItem>
     /// Product name
     /// </summary>
     public string ProductName { get; private set; }
+    
+    /// <summary>
+    /// Product unit price
+    /// </summary>
+    public decimal ProductUnitPrice { get; private set; }
     
     /// <summary>
     /// Quantity
@@ -56,6 +79,12 @@ public class OrderItem : BaseEntity<OrderItem>
     public Guid ProductId { get; private set; }
 
     #endregion
+    
+    #endregion
+    
+    #region Methods
+
+    
     
     #endregion
 }

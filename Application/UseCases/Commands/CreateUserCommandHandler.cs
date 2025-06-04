@@ -30,7 +30,11 @@ public class CreateUserCommandHandler(
         
         var hashedPassword = passwordHasher.HashPassword(request.Password);
 
-        var user = new User(request.Username, request.Email, hashedPassword);
+        var user = new User(
+            request.Username, 
+            request.Email, 
+            hashedPassword
+            );
         
         await userWriteRepository.AddAsync(user, cancellationToken);
         

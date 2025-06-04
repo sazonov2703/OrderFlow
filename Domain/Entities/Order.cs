@@ -24,16 +24,20 @@ public class Order : BaseEntity<Order>
     /// Public constructor
     /// </summary>
     /// <param name="workspace">Workspace</param>
+    /// /// <param name="orderItems">Order items</param>
     /// <param name="customer">Customer</param>
-    /// <param name="orderItems">Order items</param>
     /// <param name="shippingAddress">Shipping address</param>
-    /// <param name="totaAmount">Total amount</param>
+    /// <param name="shippingCost">Shipping cost</param>
+    /// <param name="orderDeadline">Deadline</param>
     public Order(
         Workspace workspace, 
-        Customer customer, 
         List<OrderItem> orderItems,
+        Customer customer,
         ShippingAddress shippingAddress,
-        decimal totaAmount)
+        decimal shippingCost,
+        string description,
+        DateTime deadline
+        )
     {
         Workspace = workspace;
         WorkspaceId = workspace.Id;
@@ -41,8 +45,17 @@ public class Order : BaseEntity<Order>
         CustomerId = customer.Id;
         OrderItems = orderItems;
         ShippingAddress = shippingAddress;
-        TotalAmount = totaAmount;
+        ShippingCost = shippingCost;
+        Description = description;
+        
+        foreach (var orderItem in orderItems)
+        {
+            TotalAmount += orderItem.TotalPrice;
+        }
+        TotalAmount += shippingCost;
 
+        SetOrderDeadline(deadline);
+        
         // Validation
         ValidateEntity(new OrderValidator());
         
@@ -52,11 +65,26 @@ public class Order : BaseEntity<Order>
     #endregion
     
     #region Properties
-    
+
     /// <summary>
     /// Total deal value
     /// </summary>
-    public decimal TotalAmount { get; private set; }
+    public decimal TotalAmount { get; private set; } = 0;
+    
+    /// <summary>
+    /// Shipping cost
+    /// </summary>
+    public decimal ShippingCost { get; private set; }
+    
+    /// <summary>
+    /// Description
+    /// </summary>
+    public string Description { get; private set; }
+    
+    /// <summary>
+    /// Deadline
+    /// </summary>
+    public DateTime Deadline { get; private set; }
     
     #region Navigation Properties
     
@@ -96,7 +124,17 @@ public class Order : BaseEntity<Order>
     
     #region Methods
     
-    
+    public void SetOrderDeadline(DateTime deadline)
+    {
+        if (deadline == null)
+        {
+            deadline = DateTime.Now;
+        }
+
+        if (deadline < DateTime.UtcNow) throw new ArgumentException("Order date cannot be earlier than today.");
+        
+        Deadline = deadline;
+    }
     
     #endregion
 }
