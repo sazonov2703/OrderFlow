@@ -12,7 +12,6 @@
 
     <ItemGroup>
       <Folder Include="DTO\" />
-      <Folder Include="UseCases\Commands\" />
       <Folder Include="UseCases\Customers\Quaries\Handlers\" />
       <Folder Include="UseCases\Customers\Quaries\Requests\" />
       <Folder Include="UseCases\ExternalLogins\Commands\Handlers\" />
