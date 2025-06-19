@@ -1,10 +1,8 @@
 using Application.DTOs;
-using MediatR;
 
-namespace Application.UseCases.Orders.Commands.Requests;
+namespace Infrastructure.DTOs.Order;
 
-public record CreateOrderCommand(
-    Guid UserId,
+public record OrderRequest(
     Guid WorkspaceId,
     List<OrderItemInOrder> OrderItemsInOrder,
     CustomerInOrder CustomerInOrder,
@@ -12,4 +10,4 @@ public record CreateOrderCommand(
     decimal ShippingCost,
     string Description,
     DateTime Deadline
-    ) : IRequest<Guid>;
+    );

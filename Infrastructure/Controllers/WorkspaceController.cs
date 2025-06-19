@@ -13,8 +13,8 @@ namespace Infrastructure.Controllers;
 public class WorkspaceController(IMediator mediator) : Controller
 {
     [HttpPost("create")]
-    public async Task<IActionResult> CreateWorkspace([FromBody] WorkspaceRequest request, 
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateWorkspace(
+        [FromBody] WorkspaceRequest request, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

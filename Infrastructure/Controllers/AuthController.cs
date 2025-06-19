@@ -14,7 +14,8 @@ public class AuthController(IMediator mediator) : Controller
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(
             new RegisterUserCommand(request.Username, request.Email, request.Password),  
@@ -25,7 +26,8 @@ public class AuthController(IMediator mediator) : Controller
     
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new LoginUserQuery(request.Email, request.Password), 
             cancellationToken);

@@ -10,6 +10,7 @@ public class OrderFlowDbContext : DbContext
     {
         
     }
+    public DbSet<Workspace> Workspaces { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<User> Users { get; set; }
     

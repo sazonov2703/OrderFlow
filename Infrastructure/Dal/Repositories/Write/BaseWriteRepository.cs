@@ -3,10 +3,9 @@ using Application.Interfaces.Repositories;
 
 namespace Infrastructure.Dal.Repositories.Write;
 
-public abstract class BaseWriteRepository<T>(DbContext context) 
+public abstract class BaseWriteRepository<T>(OrderFlowDbContext context) 
     : IWriteRepository<T> where T : class
 {
-    protected readonly DbContext _context = context;
     private readonly DbSet<T> _dbSet = context.Set<T>();
     
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
@@ -33,6 +32,6 @@ public abstract class BaseWriteRepository<T>(DbContext context)
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

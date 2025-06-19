@@ -14,7 +14,7 @@ public class OrderItem : BaseEntity<OrderItem>
 
     public OrderItem(
         Product product,
-        Order order,
+        Order? order,
         int quantity
         )
     {
@@ -84,7 +84,16 @@ public class OrderItem : BaseEntity<OrderItem>
     
     #region Methods
 
-    
+    public void SetOrder(Order order)
+    {
+        if (order == null)
+        {
+            throw new ArgumentException("Order cannot be empty.");
+        };
+        
+        Order = order;
+        OrderId = order.Id;
+    }
     
     #endregion
 }

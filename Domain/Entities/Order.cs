@@ -23,7 +23,7 @@ public class Order : BaseEntity<Order>
     /// Public constructor
     /// </summary>
     /// <param name="workspace">Workspace</param>
-    /// /// <param name="orderItems">Order items</param>
+    /// <param name="orderItems">Order items</param>
     /// <param name="customer">Customer</param>
     /// <param name="shippingAddress">Shipping address</param>
     /// <param name="shippingCost">Shipping cost</param>
