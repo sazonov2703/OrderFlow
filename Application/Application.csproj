@@ -11,23 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTO\" />
-      <Folder Include="UseCases\Customers\Quaries\Handlers\" />
-      <Folder Include="UseCases\Customers\Quaries\Requests\" />
-      <Folder Include="UseCases\ExternalLogins\Commands\Handlers\" />
-      <Folder Include="UseCases\ExternalLogins\Commands\Requests\" />
-      <Folder Include="UseCases\ExternalLogins\Quaries\Handlers\" />
-      <Folder Include="UseCases\ExternalLogins\Quaries\Requests\" />
-      <Folder Include="UseCases\OrderItems\Quaries\Handlers\" />
-      <Folder Include="UseCases\OrderItems\Quaries\Requests\" />
-      <Folder Include="UseCases\Products\Quaries\Handlers\" />
-      <Folder Include="UseCases\Products\Quaries\Requests\" />
-      <Folder Include="UseCases\Users\Quaries\" />
-      <Folder Include="UseCases\Workspaces\Quaries\Handlers\" />
-      <Folder Include="UseCases\Workspaces\Quaries\Requests\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
       <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.3.1" />
     </ItemGroup>
