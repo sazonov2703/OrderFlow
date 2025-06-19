@@ -3,8 +3,11 @@ using Domain.Entities;
 
 namespace Infrastructure.Dal.Repositories.Write;
 
-public class ProductWriteRepository(OrderFlowDbContext context) 
-    : BaseWriteRepository<Product>(context), IProductWriteRepository
+public class ProductWriteRepository : BaseWriteRepository<Product>, IProductWriteRepository
 {
-    
+    private OrderFlowDbContext _context;
+    public ProductWriteRepository(OrderFlowDbContext context) : base(context)
+    {
+        _context = context;
+    }
 }

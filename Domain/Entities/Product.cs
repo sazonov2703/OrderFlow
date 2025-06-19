@@ -65,7 +65,7 @@ public class Product : BaseEntity<Product>
     /// <summary>
     /// Navigation property for linking to Order
     /// </summary>
-    public List<Order> Orders { get; private set; } = new List<Order>();
+    public List<Order> Orders { get; private set; }
     
     /// <summary>
     /// Navigation property for linking to Workspace
@@ -82,8 +82,16 @@ public class Product : BaseEntity<Product>
     #endregion
     
     #region Methods
-    
-    
+
+    public void AddToOrder(Order order)
+    {
+        if (order is null)
+        {
+            throw new ArgumentNullException(nameof(order));
+        }
+        
+        Orders.Add(order);
+    }
     
     #endregion
 }

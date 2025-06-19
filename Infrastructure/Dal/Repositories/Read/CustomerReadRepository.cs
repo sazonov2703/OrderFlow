@@ -3,8 +3,11 @@ using Domain.Entities;
 
 namespace Infrastructure.Dal.Repositories.Read;
 
-public class CustomerReadRepository(OrderFlowDbContext context) 
-    : BaseReadRepository<Customer>(context), ICustomerReadRepository
+public class CustomerReadRepository : BaseReadRepository<Customer>, ICustomerReadRepository
 {
-    
+    private OrderFlowDbContext _context;
+    public CustomerReadRepository(OrderFlowDbContext context) : base(context)
+    {
+        _context = context;
+    }
 }

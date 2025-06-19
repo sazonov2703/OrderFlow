@@ -4,12 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Dal.Repositories.Read;
 
-public class WorkspaceReadRepository(OrderFlowDbContext context) 
-    : BaseReadRepository<Workspace>(context), IWorkspaceReadRepository
+public class WorkspaceReadRepository: BaseReadRepository<Workspace>, IWorkspaceReadRepository
 {
+    private readonly OrderFlowDbContext _context;
+    public WorkspaceReadRepository(OrderFlowDbContext context) : base(context)
+    {
+        _context = context;
+    }
     public async Task<List<Workspace>> GetByUserAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await context.Users
+        var user = await _context.Users
             .Include(u => u.Workspaces)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 

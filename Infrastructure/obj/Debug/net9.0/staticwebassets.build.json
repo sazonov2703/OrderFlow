@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "UktiIhdsB+ZD6Z96XM4W0gkjVlAHWZupZRHVP9aiDKg=",
+  "Source": "Infrastructure",
+  "BasePath": "_content/Infrastructure",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

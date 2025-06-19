@@ -19,7 +19,7 @@ public abstract class BaseReadRepository<T>(OrderFlowDbContext context)
         return entity;
     }
 
-    public Task<IQueryable<T>> GetQueryableAsync(ODataQueryOptions<T> oDataQueryOptions, CancellationToken cancellationToken)
+    public Task<IQueryable<T>> GetQueryableAsync(ODataQueryOptions<T>? oDataQueryOptions, CancellationToken cancellationToken)
     {
         IQueryable<T> queryable = _dbSet.AsQueryable();
     
