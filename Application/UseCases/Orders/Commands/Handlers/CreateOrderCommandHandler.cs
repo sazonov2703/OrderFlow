@@ -22,7 +22,7 @@ public class CreateOrderCommandHandler(
 {
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var dto = request.CreateOrderDto;
+        var dto = request.CreateOrderCommandDto;
         
         var workspace = await GetAndValidateWorkspace(request.UserId, dto.WorkspaceId, cancellationToken);
     
@@ -67,22 +67,22 @@ public class CreateOrderCommandHandler(
         return workspace;
     }
     
-    private async Task<Customer?> GetOrCreateCustomer(CreateOrderDto dto, Workspace workspace, CancellationToken cancellationToken)
+    private async Task<Customer?> GetOrCreateCustomer(CreateOrderCommandDto commandDto, Workspace workspace, CancellationToken cancellationToken)
     {
         Customer customer;
 
-        if (IsCustomerEmpty(dto))
+        if (IsCustomerEmpty(commandDto))
         {
             return null;
         }
         
-        if (dto.CustomerId is { } customerId && customerId != Guid.Empty)
+        if (commandDto.CustomerId is { } customerId && customerId != Guid.Empty)
         {
             customer = await customerReadRepository.GetByIdAsync(customerId, cancellationToken);
 
             if (customer == null)
             {
-                throw new KeyNotFoundException($"Customer with id {dto.CustomerId} not found");
+                throw new KeyNotFoundException($"Customer with id {commandDto.CustomerId} not found");
             }
         }
 
@@ -90,12 +90,12 @@ public class CreateOrderCommandHandler(
         {
             customer = new Customer(
                 workspace,
-                dto.FirstName,
-                dto.LastName,
-                dto.Patronymic,
-                dto.Email,
-                dto.PhoneNumbers,
-                dto.Links
+                commandDto.FirstName,
+                commandDto.LastName,
+                commandDto.Patronymic,
+                commandDto.Email,
+                commandDto.PhoneNumbers,
+                commandDto.Links
             );
         }
 
@@ -136,27 +136,27 @@ public class CreateOrderCommandHandler(
         return result;
     }
     
-    private ShippingAddress BuildShippingAddress(CreateOrderDto dto)
+    private ShippingAddress BuildShippingAddress(CreateOrderCommandDto commandDto)
     {
         return new ShippingAddress(
-            dto.ShippingRecipentName,
-            dto.ShippingCountry,
-            dto.ShippingCity,
-            dto.ShippingStreet,
-            dto.ShippingHouseNumber,
-            dto.ShippingFlatNumber,
-            dto.ShippingZipCode
+            commandDto.ShippingRecipentName,
+            commandDto.ShippingCountry,
+            commandDto.ShippingCity,
+            commandDto.ShippingStreet,
+            commandDto.ShippingHouseNumber,
+            commandDto.ShippingFlatNumber,
+            commandDto.ShippingZipCode
         );
     }
     
-    private bool IsCustomerEmpty(CreateOrderDto dto)
+    private bool IsCustomerEmpty(CreateOrderCommandDto commandDto)
     {
-        return dto.CustomerId == Guid.Empty
-               && string.IsNullOrWhiteSpace(dto.FirstName)
-               && string.IsNullOrWhiteSpace(dto.LastName)
-               && string.IsNullOrWhiteSpace(dto.Patronymic)
-               && string.IsNullOrWhiteSpace(dto.Email)
-               && (dto.PhoneNumbers == null || dto.PhoneNumbers.Count == 0)
-               && (dto.Links == null || dto.Links.Count == 0);
+        return commandDto.CustomerId == Guid.Empty
+               && string.IsNullOrWhiteSpace(commandDto.FirstName)
+               && string.IsNullOrWhiteSpace(commandDto.LastName)
+               && string.IsNullOrWhiteSpace(commandDto.Patronymic)
+               && string.IsNullOrWhiteSpace(commandDto.Email)
+               && (commandDto.PhoneNumbers == null || commandDto.PhoneNumbers.Count == 0)
+               && (commandDto.Links == null || commandDto.Links.Count == 0);
     }
 }

@@ -1,6 +1,6 @@
 namespace Application.UseCases.Orders.Commands.DTOs;
 
-public record CreateOrderDto(
+public record CreateOrderCommandDto(
     Guid WorkspaceId,
     
     List<OrderItemDto> OrderItems,

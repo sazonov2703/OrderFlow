@@ -17,7 +17,7 @@ public class RegisterUserCommandHandler(
 {
     public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var dto = request.RegisterUserDto;
+        var dto = request.RegisterUserCommandDto;
         
         if (await userReadRepository.IsEmailExistAsync(dto.Email, cancellationToken))
         {

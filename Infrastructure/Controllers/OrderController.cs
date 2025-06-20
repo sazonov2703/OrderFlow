@@ -14,7 +14,7 @@ public class OrderController(IMediator mediator) : Controller
 {
     [HttpPost("create")]
     public async Task<IActionResult> CreateOrder(
-        [FromBody] CreateOrderDto createOrderDto, CancellationToken cancellationToken)
+        [FromBody] CreateOrderCommandDto createOrderCommandDto, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -24,7 +24,7 @@ public class OrderController(IMediator mediator) : Controller
         }
         
         var result = await mediator.Send(new CreateOrderCommand(
-            Guid.Parse(userId), createOrderDto), cancellationToken);
+            Guid.Parse(userId), createOrderCommandDto), cancellationToken);
         
         return Ok(result);
     }

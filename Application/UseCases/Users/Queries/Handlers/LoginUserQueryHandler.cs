@@ -13,7 +13,7 @@ public class LoginUserQueryHandler(
 {
     public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        var dto = request.LoginUserDto;
+        var dto = request.LoginUserQueryDto;
         
         if (!await userReadRepository.IsEmailExistAsync(dto.Email, cancellationToken))
         {

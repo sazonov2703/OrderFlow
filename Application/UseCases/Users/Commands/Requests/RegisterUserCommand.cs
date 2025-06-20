@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.UseCases.Users.Commands.Requests;
 
-public record RegisterUserCommand(RegisterUserDto RegisterUserDto) : IRequest<string>;
+public record RegisterUserCommand(RegisterUserCommandDto RegisterUserCommandDto) : IRequest<string>;
