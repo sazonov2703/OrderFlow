@@ -1,6 +1,6 @@
 using System.Security.Claims;
+using Application.UseCases.Workspaces.Commands.DTOs;
 using Application.UseCases.Workspaces.Commands.Requests;
-using Infrastructure.DTOs.Workspace;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ public class WorkspaceController(IMediator mediator) : Controller
 {
     [HttpPost("create")]
     public async Task<IActionResult> CreateWorkspace(
-        [FromBody] WorkspaceRequest request, CancellationToken cancellationToken)
+        [FromBody] CreateWorkspaceDto createWorkspaceDto, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -24,7 +24,7 @@ public class WorkspaceController(IMediator mediator) : Controller
         }
         
         var result = await mediator.Send(
-            new CreateWorkspaceCommand(Guid.Parse(userId), request.Name),
+            new CreateWorkspaceCommand(Guid.Parse(userId), createWorkspaceDto),
             cancellationToken
         );
         

@@ -13,14 +13,16 @@ public class LoginUserQueryHandler(
 {
     public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        if (!await userReadRepository.IsEmailExistAsync(request.Email, cancellationToken))
+        var dto = request.LoginUserDto;
+        
+        if (!await userReadRepository.IsEmailExistAsync(dto.Email, cancellationToken))
         {
-            throw new KeyNotFoundException($"User with email {request.Email} was not found");
+            throw new KeyNotFoundException($"User with email {dto.Email} was not found");
         }
         
-        var user = await userReadRepository.GetUserByEmailAsync(request.Email, cancellationToken);
+        var user = await userReadRepository.GetUserByEmailAsync(dto.Email, cancellationToken);
 
-        if (!passwordHasher.VerifyHashedPassword(user.HashedPassword, request.Password))
+        if (!passwordHasher.VerifyHashedPassword(user.HashedPassword, dto.Password))
         {
             throw new ArgumentException($"Invalid password");
         }

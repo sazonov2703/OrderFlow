@@ -17,19 +17,21 @@ public class RegisterUserCommandHandler(
 {
     public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        if (await userReadRepository.IsEmailExistAsync(request.Email, cancellationToken))
+        var dto = request.RegisterUserDto;
+        
+        if (await userReadRepository.IsEmailExistAsync(dto.Email, cancellationToken))
         {
-            throw new ArgumentException($"User with email {request.Email} already exists");
+            throw new ArgumentException($"User with email {dto.Email} already exists");
         }
 
-        if (await userReadRepository.IsUsernameExistAsync(request.Username, cancellationToken))
+        if (await userReadRepository.IsUsernameExistAsync(dto.Username, cancellationToken))
         {
-            throw new ArgumentException($"User with username {request.Username} already exists");
+            throw new ArgumentException($"User with username {dto.Username} already exists");
         }
 
-        var hashedPassword = passwordHasher.HashPassword(request.Password);
+        var hashedPassword = passwordHasher.HashPassword(dto.Password);
 
-        var user = new User(request.Username, request.Email, hashedPassword);
+        var user = new User(dto.Username, dto.Email, hashedPassword);
 
         await userWriteRepository.AddAsync(user, cancellationToken);
 

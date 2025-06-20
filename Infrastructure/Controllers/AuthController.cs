@@ -1,10 +1,10 @@
+using Application.UseCases.Users.Commands.DTOs;
 using Application.UseCases.Users.Commands.Requests;
+using Application.UseCases.Users.Queries.DTOs;
 using Application.UseCases.Users.Queries.Requests;
-using Infrastructure.DTOs.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RegisterRequest = Infrastructure.DTOs.Auth.RegisterRequest;
 
 namespace Infrastructure.Controllers;
 
@@ -15,10 +15,10 @@ public class AuthController(IMediator mediator) : Controller
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register(
-        [FromBody] RegisterRequest request, CancellationToken cancellationToken)
+        [FromBody] RegisterUserDto registerUserDto, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(
-            new RegisterUserCommand(request.Username, request.Email, request.Password),  
+            new RegisterUserCommand(registerUserDto),  
             cancellationToken);
         
         return Ok(result);
@@ -27,9 +27,9 @@ public class AuthController(IMediator mediator) : Controller
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(
-        [FromBody] LoginRequest request, CancellationToken cancellationToken)
+        [FromBody] LoginUserDto loginUserDto, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new LoginUserQuery(request.Email, request.Password), 
+        var result = await mediator.Send(new LoginUserQuery(loginUserDto), 
             cancellationToken);
 
         return Ok(result);

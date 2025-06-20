@@ -6,5 +6,6 @@ public record CreateProductCommand(
     Guid WorkspaceId, 
     string Name, 
     string Description,
-    decimal UnitPrice
+    decimal UnitPrice,
+    string ImageUrl
     ) : IRequest<Guid>;

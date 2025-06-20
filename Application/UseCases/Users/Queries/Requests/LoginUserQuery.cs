@@ -1,5 +1,6 @@
+using Application.UseCases.Users.Queries.DTOs;
 using MediatR;
 
 namespace Application.UseCases.Users.Queries.Requests;
 
-public record LoginUserQuery(string Email, string Password) : IRequest<string>;
+public record LoginUserQuery(LoginUserDto LoginUserDto) : IRequest<string>;

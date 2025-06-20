@@ -1,15 +1,6 @@
-using Application.DTOs;
+using Application.UseCases.Orders.Commands.DTOs;
 using MediatR;
 
 namespace Application.UseCases.Orders.Commands.Requests;
 
-public record CreateOrderCommand(
-    Guid UserId,
-    Guid WorkspaceId,
-    List<OrderItemInOrder> OrderItemsInOrder,
-    CustomerInOrder CustomerInOrder,
-    ShippingInOrder ShippingInOrder,
-    decimal ShippingCost,
-    string Description,
-    DateTime Deadline
-    ) : IRequest<Guid>;
+public record CreateOrderCommand(Guid UserId, CreateOrderDto CreateOrderDto) : IRequest<Guid>;

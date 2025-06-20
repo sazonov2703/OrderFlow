@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
+using Application.UseCases.Orders.Commands.DTOs;
 using Application.UseCases.Orders.Commands.Requests;
 using Domain.Entities;
 using Domain.ValueObjects;
@@ -21,86 +22,141 @@ public class CreateOrderCommandHandler(
 {
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        // Getting workspace by user id
-        var workspaces = await workspaceReadRepository.GetByUserAsync(request.UserId, cancellationToken);
-
-        var workspace = workspaces.Where(w => w.Id == request.WorkspaceId).FirstOrDefault();
-
-        if (workspace == null)
-        {
-            throw new KeyNotFoundException(
-                $"User {request.UserId} does not have access to workspace {request.WorkspaceId}");
-        }
+        var dto = request.CreateOrderDto;
         
-        // Getting products and order items
-        var orderItems = new List<OrderItem>();
+        var workspace = await GetAndValidateWorkspace(request.UserId, dto.WorkspaceId, cancellationToken);
+    
+        var orderItems = await BuildOrderItems(dto.OrderItems, workspace, cancellationToken);
+    
+        var customer = await GetOrCreateCustomer(dto, workspace, cancellationToken);
+    
+        var shippingAddress = BuildShippingAddress(dto);
 
-        foreach (var orderItemInOrder in request.OrderItemsInOrder)
-        {
-            if (orderItemInOrder.ProductId != Guid.Empty)
-            {
-                var product = await productReadRepository.GetByIdAsync((Guid)orderItemInOrder.ProductId, cancellationToken);
-                var orderItem = new OrderItem(product, null, orderItemInOrder.Quantity);
-                orderItems.Add(orderItem);
-            }
-            
-            else if (orderItemInOrder.ProductId == Guid.Empty)
-            {
-                var product = new Product(
-                    workspace, orderItemInOrder.Name, orderItemInOrder.Description, orderItemInOrder.UnitPrice
-                    );
-                
-                await productWriteRepository.AddAsync(product, cancellationToken);
-                
-                var orderItem = new OrderItem(product, null, orderItemInOrder.Quantity);
-                orderItems.Add(orderItem);
-            }
-        }
-        
-        // Getting customer
-        if (request.CustomerInOrder.CustomerId == Guid.Empty)
-        {
-            var newCustomer = new Customer(
-                workspace, request.CustomerInOrder.firstName, 
-                request.CustomerInOrder.lastName, request.CustomerInOrder.patronymic, 
-                request.CustomerInOrder.email, request.CustomerInOrder.phoneNumbers,
-                request.CustomerInOrder.links
-                );
-            
-            await customerWriteRepository.AddAsync(newCustomer, cancellationToken);
-        }
-
-        var customer = await customerReadRepository.GetByIdAsync(
-                (Guid)request.CustomerInOrder.CustomerId, cancellationToken);
-        
-        // Getting shipping address
-        var shippingAddress = new ShippingAddress(
-            request.ShippingInOrder.ShippingRecipentName, request.ShippingInOrder.ShippingCountry, 
-            request.ShippingInOrder.ShippingCity, request.ShippingInOrder.ShippingStreet, 
-            request.ShippingInOrder.ShippingHouseNumber, request.ShippingInOrder.ShippingFlatNumber, 
-            request.ShippingInOrder.ShippingZipCode)
-            ;
-        
-        // Creating order and add Order to OrderItems
-        var order = new Order(workspace, orderItems, customer, shippingAddress, request.ShippingCost, request.Description, request.Deadline);
+        var order = new Order(
+            workspace, orderItems, customer, shippingAddress, 
+            dto.ShippingCost, dto.Description, dto.CloseDate);
 
         foreach (var orderItem in orderItems)
         {
             orderItem.SetOrder(order);
-            orderItem.Product.AddToOrder(order);
+            orderItem.Product.AddToOrderItem(orderItem);
         }
-        
-        // Adding order and orderItems to db
+
         await orderWriteRepository.AddAsync(order, cancellationToken);
 
-        foreach (var orderItem in orderItems)
+        foreach (var item in orderItems)
         {
-            await orderItemWriteRepository.AddAsync(orderItem, cancellationToken);
+            await orderItemWriteRepository.AddAsync(item, cancellationToken);
+        }
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return order.Id;
+    }
+    
+    private async Task<Workspace> GetAndValidateWorkspace(Guid userId, Guid workspaceId, CancellationToken cancellationToken)
+    {
+        var workspaces = await workspaceReadRepository.GetByUserAsync(userId, cancellationToken);
+        var workspace = workspaces.FirstOrDefault(w => w.Id == workspaceId);
+
+        if (workspace == null)
+        {
+            throw new KeyNotFoundException($"User {userId} does not have access to workspace {workspaceId}");
+        }
+
+        return workspace;
+    }
+    
+    private async Task<Customer?> GetOrCreateCustomer(CreateOrderDto dto, Workspace workspace, CancellationToken cancellationToken)
+    {
+        Customer customer;
+
+        if (IsCustomerEmpty(dto))
+        {
+            return null;
         }
         
-        // UnitOfWork instead of multiply SaveChangesAsync(for ACID)
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        if (dto.CustomerId is { } customerId && customerId != Guid.Empty)
+        {
+            customer = await customerReadRepository.GetByIdAsync(customerId, cancellationToken);
+
+            if (customer == null)
+            {
+                throw new KeyNotFoundException($"Customer with id {dto.CustomerId} not found");
+            }
+        }
+
+        else
+        {
+            customer = new Customer(
+                workspace,
+                dto.FirstName,
+                dto.LastName,
+                dto.Patronymic,
+                dto.Email,
+                dto.PhoneNumbers,
+                dto.Links
+            );
+        }
+
+        await customerWriteRepository.AddAsync(customer, cancellationToken);
         
-        return order.Id;
+        return customer;
+    }
+    
+    private async Task<List<OrderItem>> BuildOrderItems(List<OrderItemDto> orderItemDto, Workspace workspace, CancellationToken cancellationToken)
+    {
+        var result = new List<OrderItem>();
+
+        foreach (var item in orderItemDto)
+        {
+            Product product;
+
+            if (item.ProductId is { } productId && productId != Guid.Empty)
+            {
+                product = await productReadRepository.GetByIdAsync(productId, cancellationToken);
+                
+                if (product == null)
+                    throw new KeyNotFoundException($"Product with id {item.ProductId} not found");
+            }
+            
+            else
+            {
+                product = new Product(
+                    workspace, item.ProductName, item.ProductDescription, item.ProductUnitPrice, item.ProductImageUrl);
+                await productWriteRepository.AddAsync(product, cancellationToken);
+            }
+
+            var orderItem = new OrderItem(product, null, item.Quantity);
+            orderItem.UpdateFields(item.ProductName, item.ProductUnitPrice, item.Quantity);
+
+            result.Add(orderItem);
+        }
+
+        return result;
+    }
+    
+    private ShippingAddress BuildShippingAddress(CreateOrderDto dto)
+    {
+        return new ShippingAddress(
+            dto.ShippingRecipentName,
+            dto.ShippingCountry,
+            dto.ShippingCity,
+            dto.ShippingStreet,
+            dto.ShippingHouseNumber,
+            dto.ShippingFlatNumber,
+            dto.ShippingZipCode
+        );
+    }
+    
+    private bool IsCustomerEmpty(CreateOrderDto dto)
+    {
+        return dto.CustomerId == Guid.Empty
+               && string.IsNullOrWhiteSpace(dto.FirstName)
+               && string.IsNullOrWhiteSpace(dto.LastName)
+               && string.IsNullOrWhiteSpace(dto.Patronymic)
+               && string.IsNullOrWhiteSpace(dto.Email)
+               && (dto.PhoneNumbers == null || dto.PhoneNumbers.Count == 0)
+               && (dto.Links == null || dto.Links.Count == 0);
     }
 }

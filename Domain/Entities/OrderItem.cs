@@ -13,20 +13,21 @@ public class OrderItem : BaseEntity<OrderItem>
     }
 
     public OrderItem(
-        Product product,
+        Product? product,
         Order? order,
         int quantity
-        )
+    )
     {
-        Product = product;
-        ProductId = product.Id;
-        Order = order;
-        OrderId = order.Id;
-        ProductName = product.Name;
-        ProductUnitPrice = product.UnitPrice;
-        Quantity = quantity;
-        
-        TotalPrice = ProductUnitPrice * Quantity;
+        if (product is not null)
+        {
+            UpdateProduct(product, quantity);;
+        }
+
+        if (order is not null)
+        {
+            Order = order;
+            OrderId = order.Id;
+        }
         
         //ValidateEntity();
         //AddDomainEvent();
@@ -93,6 +94,72 @@ public class OrderItem : BaseEntity<OrderItem>
         
         Order = order;
         OrderId = order.Id;
+        
+        //ValidateEntity();
+        //AddDomainEvent();
+    }
+    
+    /// <summary>
+    /// Method for setting or updating Product of OrderItem.
+    /// </summary>
+    /// <param name="product">Product</param>
+    /// <param name="quantity">Quantity</param>
+    /// <exception cref="ArgumentException">Product cannot be empty.</exception>
+    public void UpdateProduct(Product product, int quantity)
+    {
+        if (product == null)
+        {
+            throw new ArgumentException("Product cannot be empty.");
+        };
+        
+        Product = product;
+        ProductId = product.Id;
+            
+        ProductName = product.Name;
+        ProductUnitPrice = product.UnitPrice;
+        Quantity = quantity;
+        
+        TotalPrice = ProductUnitPrice * Quantity;
+        
+        //ValidateEntity();
+        //AddDomainEvent();
+    }
+
+    /// <summary>
+    /// Method for updating fields of OrderItem without changing the Product.
+    /// </summary>
+    /// <param name="productName">Product name</param>
+    /// <param name="productUnitPrice">Product unit price</param>
+    /// <param name="quantity">Quantity</param>
+    public void UpdateFields(string? productName, decimal? productUnitPrice, int? quantity)
+    {
+        if (productName is null && productUnitPrice is null && quantity is null)
+        {
+            throw new ArgumentException("At least one field must be updated.");
+        }
+        
+        if (productName is not null)
+        {
+            ProductName = productName;
+        }
+        
+        if (productUnitPrice is not null)
+        {
+            ProductUnitPrice = (decimal)productUnitPrice;
+        }
+        
+        if (quantity is not null)
+        {
+            Quantity = (int)quantity;
+        }
+        
+        if (productUnitPrice is not null || quantity is not null)
+        {
+            TotalPrice = ProductUnitPrice * Quantity;
+        }
+        
+        //ValidateEntity();
+        //AddDomainEvent();
     }
     
     #endregion

@@ -13,14 +13,13 @@ public class CreateWorkspaceCommandHandler(
 {
     public async Task<Guid> Handle(CreateWorkspaceCommand request, CancellationToken cancellationToken)
     {
+        var dto = request.CreateWorkspaceDto;
+        
         var user = await userReadRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user == null) throw new InvalidOperationException($"User {request.UserId} does not exist.");
 
-        var workspace = new Workspace(
-            request.Name, 
-            user
-            );
+        var workspace = new Workspace(dto.Name, user);
         
         await workspaceWriteRepository.AddAsync(workspace, cancellationToken);
         

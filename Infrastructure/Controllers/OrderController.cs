@@ -1,6 +1,6 @@
 using System.Security.Claims;
+using Application.UseCases.Orders.Commands.DTOs;
 using Application.UseCases.Orders.Commands.Requests;
-using Infrastructure.DTOs.Order;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ public class OrderController(IMediator mediator) : Controller
 {
     [HttpPost("create")]
     public async Task<IActionResult> CreateOrder(
-        [FromBody] OrderRequest request, CancellationToken cancellationToken)
+        [FromBody] CreateOrderDto createOrderDto, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -23,12 +23,8 @@ public class OrderController(IMediator mediator) : Controller
             return Unauthorized();       
         }
         
-        var workspaceId = request.WorkspaceId;
-        
         var result = await mediator.Send(new CreateOrderCommand(
-            Guid.Parse(userId), workspaceId, request.OrderItemsInOrder, request.CustomerInOrder,
-            request.ShippingInOrder, request.ShippingCost, request.Description, request.Deadline
-            ), cancellationToken);
+            Guid.Parse(userId), createOrderDto), cancellationToken);
         
         return Ok(result);
     }

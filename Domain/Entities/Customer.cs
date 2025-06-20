@@ -27,12 +27,12 @@ public class Customer : BaseEntity<Customer>
     /// <param name="links">Links</param>
     public Customer(
         Workspace workspace,
-        string firstName,
-        string lastName,
-        string patronymic,
-        string email,
-        List<string> phoneNumbers,
-        List<string> links
+        string? firstName,
+        string? lastName,
+        string? patronymic,
+        string? email,
+        List<string>? phoneNumbers,
+        List<string>? links
         )
     {
         Workspace = workspace;
@@ -58,39 +58,39 @@ public class Customer : BaseEntity<Customer>
     /// <summary>
     /// First name
     /// </summary>
-    public string FirstName { get; private set; }
+    public string? FirstName { get; private set; }
     
     /// <summary>
     /// Last name
     /// </summary>
-    public string LastName { get; private set; }
+    public string? LastName { get; private set; }
     
     /// <summary>
     /// Patronymic
     /// </summary>
-    public string Patronymic { get; private set; }
+    public string? Patronymic { get; private set; }
     
     /// <summary>
     /// Email
     /// </summary>
-    public string Email { get; private set; }
+    public string? Email { get; private set; }
     
     /// <summary>
     /// Phone numbers
     /// </summary>
-    public List<string> PhoneNumbers { get; private set; }
+    public List<string>? PhoneNumbers { get; private set; }
     
     /// <summary>
     /// Links to social media
     /// </summary>
-    public List<string> Links { get; private set; }
+    public List<string>? Links { get; private set; }
 
     #region Navigation Properties
 
     /// <summary>
     /// Navigation property for linking to Order
     /// </summary>
-    public List<Order> Orders { get; private set; }
+    public List<Order>? Orders { get; private set; }
     
     /// <summary>
     /// Navigation property for linking to Workspace
@@ -107,8 +107,8 @@ public class Customer : BaseEntity<Customer>
     #endregion
     
     #region Methods
-    
-    
+
+
     
     #endregion
 }

@@ -15,4 +15,9 @@
       <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.3.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UseCases\Orders\Queries\Handlers\" />
+      <Folder Include="UseCases\Orders\Queries\Requests\" />
+    </ItemGroup>
+
 </Project>

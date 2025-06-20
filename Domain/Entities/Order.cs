@@ -27,35 +27,41 @@ public class Order : BaseEntity<Order>
     /// <param name="customer">Customer</param>
     /// <param name="shippingAddress">Shipping address</param>
     /// <param name="shippingCost">Shipping cost</param>
-    /// <param name="orderDeadline">Deadline</param>
     /// <param name="description">Description</param>
-    /// <param name="deadline">Deadline</param>
+    /// <param name="deadline">Close date</param>
     public Order(
         Workspace workspace, 
         List<OrderItem> orderItems,
-        Customer customer,
-        ShippingAddress shippingAddress,
-        decimal shippingCost,
+        Customer? customer,
+        ShippingAddress? shippingAddress,
+        decimal? shippingCost,
         string description,
-        DateTime deadline
+        DateTime closeDate
         )
     {
         Workspace = workspace;
         WorkspaceId = workspace.Id;
-        Customer = customer;
-        CustomerId = customer.Id;
+        
+        if (customer is not null)
+        {
+            Customer = customer;
+            CustomerId = customer.Id;
+        }
+        
         OrderItems = orderItems;
-        ShippingAddress = shippingAddress;
-        ShippingCost = shippingCost;
+        ShippingAddress = shippingAddress ?? null;
+        ShippingCost = shippingCost ?? 0;
         Description = description;
         
         foreach (var orderItem in orderItems)
         {
             TotalAmount += orderItem.TotalPrice;
         }
-        TotalAmount += shippingCost;
+        
+        
+        TotalAmount += shippingCost ?? 0;
 
-        SetOrderDeadline(deadline);
+        SetOrderDeadline(closeDate);
         
         // Validation
         ValidateEntity(new OrderValidator());
@@ -83,9 +89,9 @@ public class Order : BaseEntity<Order>
     public string Description { get; private set; }
     
     /// <summary>
-    /// Deadline
+    /// CloseDate
     /// </summary>
-    public DateTime Deadline { get; private set; }
+    public DateTime CloseDate { get; private set; }
     
     #region Navigation Properties
     
@@ -102,12 +108,12 @@ public class Order : BaseEntity<Order>
     /// <summary>
     /// Navigation property for linking to Customer
     /// </summary>
-    public Customer Customer { get; private set; }
+    public Customer? Customer { get; private set; }
     
     /// <summary>
     /// Navigation property for linking to Customer
     /// </summary>
-    public Guid CustomerId { get; private set; }
+    public Guid? CustomerId { get; private set; }
     
     /// <summary>
     /// Navigation property for linking to OrderItem
@@ -117,7 +123,7 @@ public class Order : BaseEntity<Order>
     /// <summary>
     /// Navigation property for linking to ShippingAddress
     /// </summary>
-    public ShippingAddress ShippingAddress { get; private set; }
+    public ShippingAddress? ShippingAddress { get; private set; }
 
     #endregion
 
@@ -125,16 +131,11 @@ public class Order : BaseEntity<Order>
     
     #region Methods
     
-    public void SetOrderDeadline(DateTime deadline)
+    public void SetOrderDeadline(DateTime closeDate)
     {
-        if (deadline == null)
-        {
-            deadline = DateTime.Now;
-        }
-
-        if (deadline < DateTime.UtcNow) throw new ArgumentException("Order date cannot be earlier than today.");
+        if (closeDate < DateTime.UtcNow) throw new ArgumentException("Order date cannot be earlier than today.");
         
-        Deadline = deadline;
+        CloseDate = closeDate;
     }
     
     #endregion

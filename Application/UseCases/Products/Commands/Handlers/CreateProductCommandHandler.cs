@@ -18,11 +18,7 @@ public class CreateProductCommandHandler(
         if (workspace == null) throw new InvalidOperationException($"Workspace {request.WorkspaceId} does not exist");
 
         var product = new Product(
-            workspace, 
-            request.Name, 
-            request.Description, 
-            request.UnitPrice
-            );
+            workspace, request.Name, request.Description, request.UnitPrice, request.ImageUrl);
         
         await productWriteRepository.AddAsync(product, cancellationToken);
         

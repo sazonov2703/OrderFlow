@@ -10,9 +10,9 @@ public class Product : BaseEntity<Product>
     /// <summary>
     /// Empty constructor for EF Core
     /// </summary>
-    private Product()
+    private Product(List<OrderItem> orderItems)
     {
-        
+        OrderItems = orderItems;
     }
 
     /// <summary>
@@ -20,20 +20,24 @@ public class Product : BaseEntity<Product>
     /// </summary>
     /// <param name="workspace">Workspace</param>
     /// <param name="name">Nme</param>
-    /// <param name="description">Description</param>
     /// <param name="unitPrice">Price</param>
+    /// <param name="imageUrl">Image URL</param>
+    /// <param name="description">Description</param>
     public Product(
         Workspace workspace,
-        string name, 
-        string description, 
-        decimal unitPrice
+        string? name,
+        string? description,
+        decimal? unitPrice,
+        string? imageUrl
         )
     {
         Workspace = workspace;
         WorkspaceId = workspace.Id;
-        Name = name;
-        Description = description;
-        UnitPrice = unitPrice;
+        
+        Name = name ?? string.Empty;
+        UnitPrice = unitPrice ?? 0;
+        Description = description ?? string.Empty;
+        ImageUrl = imageUrl ?? string.Empty;;
         
         // Validation
         ValidateEntity(new ProductValidator());
@@ -48,24 +52,29 @@ public class Product : BaseEntity<Product>
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; private set; }
+    public string? Name { get; private set; }
     
     /// <summary>
     /// Description
     /// </summary>
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
     
     /// <summary>
     /// Price
     /// </summary>
     public decimal UnitPrice { get; private set; }
     
+    /// <summary>
+    /// Image URL
+    /// </summary>
+    public string? ImageUrl { get; private set; }
+    
     #region Navigation Properties
 
     /// <summary>
-    /// Navigation property for linking to Order
+    /// Navigation property for linking to OrderItems
     /// </summary>
-    public List<Order> Orders { get; private set; }
+    public List<OrderItem> OrderItems { get; private set; } = new List<OrderItem>();
     
     /// <summary>
     /// Navigation property for linking to Workspace
@@ -83,14 +92,14 @@ public class Product : BaseEntity<Product>
     
     #region Methods
 
-    public void AddToOrder(Order order)
+    public void AddToOrderItem(OrderItem orderItem)
     {
-        if (order is null)
+        if (orderItem is null)
         {
-            throw new ArgumentNullException(nameof(order));
+            throw new ArgumentNullException(nameof(orderItem));
         }
         
-        Orders.Add(order);
+        OrderItems.Add(orderItem);
     }
     
     #endregion
