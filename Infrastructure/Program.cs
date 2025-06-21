@@ -49,7 +49,6 @@ builder.Services.AddDbContext<OrderFlowDbContext>(options =>
     );
 
 // Add services
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 // Add repositories
