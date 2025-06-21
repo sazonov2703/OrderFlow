@@ -1,10 +1,7 @@
-using Application.Interfaces;
-using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
 using Application.Services.Customers;
 using Application.Services.OrderItems;
 using Application.Services.Workspaces;
-using Application.UseCases.Orders.DTOs;
 using Application.UseCases.Orders.Requests;
 using Domain.Entities;
 using Domain.ValueObjects;
