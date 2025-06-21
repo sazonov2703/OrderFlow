@@ -24,12 +24,12 @@ public class CreateOrderCommandHandler(
         var dto = request.CreateOrderCommandDto;
 
         // Get and validate the workspace
-        var worksapce = await workspaceAccessService.GetAndValidateWorkspaceById(
+        var workspace = await workspaceAccessService.GetAndValidateWorkspaceById(
             request.UserId, dto.WorkspaceId, cancellationToken);
 
         // Get or create the customer
         var customer = await customerResolverService.GetOrCreateCustomer(
-            worksapce, dto.CustomerId, dto.FirstName, dto.LastName,
+            workspace, dto.CustomerId, dto.FirstName, dto.LastName,
             dto.Patronymic, dto.Email, dto.PhoneNumbers, dto.Links, cancellationToken);
 
         // Create the shipping address
@@ -37,11 +37,11 @@ public class CreateOrderCommandHandler(
             dto.ShippingStreet, dto.ShippingHouseNumber, dto.ShippingFlatNumber, dto.ShippingZipCode);
         
         // Create order without items
-        var order = new Order(worksapce, null, customer, shippingAddress, dto.ShippingCost, dto.Description);
+        var order = new Order(workspace, null, customer, shippingAddress, dto.ShippingCost, dto.Description);
 
         // Create order items and add them to the order
         await orderItemBuilderService.BuildOrderItemsAndAttachToOrderAsync(
-            worksapce, order, dto.OrderItems, cancellationToken);
+            workspace, order, dto.OrderItems, cancellationToken);
             
         // Save the order
         await orderWriteRepository.AddAsync(order, cancellationToken);

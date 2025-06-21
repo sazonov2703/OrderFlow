@@ -13,14 +13,9 @@ public class CustomerResolverService(
         string? email, List<string>? phoneNumbers, List<string>? links, CancellationToken cancellationToken)
     {
         Customer customer;
-        if (customerId is not null || customerId != Guid.Empty)
+        if (customerId is not null && customerId != Guid.Empty)
         {
-            if (customerId != null)
-                customer = await customerReadRepository.GetByIdAsync(customerId.Value, cancellationToken);
-            else
-            {
-                throw new NullReferenceException("Customer id is null");
-            }
+            customer = await customerReadRepository.GetByIdAsync(customerId.Value, cancellationToken);
         }
         else
         {
