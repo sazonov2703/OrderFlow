@@ -62,10 +62,13 @@ public class User : BaseEntity<User>
     #region Navigation Properties
     
     /// <summary>
-    /// Navigation property for linking to Workspace
+    /// Navigation property for linking to UserWorkspace
     /// </summary>
-    public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
+    public List<UserWorkspace> UserWorkspaces { get; private set; } = new();
     
+    /// <summary>
+    /// Navigation property for linking to ExternalLogin
+    /// </summary>
     public List<ExternalLogin> ExternalLogins { get; private set; }
     
     #endregion

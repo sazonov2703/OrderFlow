@@ -10,6 +10,10 @@ public class OrderFlowDbContext : DbContext
     {
         
     }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<UserWorkspace> UserWorkspaces { get; set; }
     public DbSet<Workspace> Workspaces { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<User> Users { get; set; }
@@ -29,5 +33,11 @@ public class OrderFlowDbContext : DbContext
         
         modelBuilder.ApplyConfiguration(new OrderConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new WorkspaceConfiguration());
+        modelBuilder.ApplyConfiguration(new UserWorkspaceConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
     }
 }

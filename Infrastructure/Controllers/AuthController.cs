@@ -1,7 +1,7 @@
 using Application.UseCases.Users.Commands.DTOs;
 using Application.UseCases.Users.Commands.Requests;
 using Application.UseCases.Users.Queries.DTOs;
-using Application.UseCases.Users.Queries.Requests;
+using Application.UseCases.Users.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -50,14 +50,24 @@ public class Workspace : BaseEntity<Workspace>
     #region Navigation Properties
     
     /// <summary>
-    /// Navigation property for linking to User
+    /// Navigation property for linking to UserWorkspace
     /// </summary>
-    public List<User> Users { get; private set; } = new List<User>();
+    public List<UserWorkspace> UserWorkspaces { get; private set; } = new();
     
     /// <summary>
     /// Navigation property for linking to Order
     /// </summary>
     public List<Order> Orders { get; private set; } = new List<Order>();
+    
+    /// <summary>
+    /// Navigation property for linking to Customer
+    /// </summary>
+    public List<Customer> Customers { get; private set; } = new List<Customer>(); 
+    
+    /// <summary>
+    /// Navigation property for linking to Product
+    /// </summary>
+    public List<Product> Products { get; private set; } = new List<Product>();
     
     #endregion
     
@@ -69,10 +79,17 @@ public class Workspace : BaseEntity<Workspace>
     {
         if (user is null) throw new ArgumentNullException(nameof(user));
 
-        if (Users.Any(u => u.Id == user.Id)) 
+        if (UserWorkspaces.Any(uw => uw.UserId == user.Id))
             throw new ArgumentException($"User {nameof(user)} already exists.");
         
-        Users.Add(user);
+        UserWorkspaces.Add(new UserWorkspace
+        {
+            User = user, 
+            Workspace = this 
+            
+        });
+        
+        // ValidateEntity();
         AddDomainEvent(new AddUserToWorkspaceEvent());
     }
     

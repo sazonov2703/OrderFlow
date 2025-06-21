@@ -13,20 +13,21 @@ public class OrderItem : BaseEntity<OrderItem>
     }
 
     public OrderItem(
+        Workspace workspace, 
         Product? product,
-        Order? order,
+        Order order,
         int quantity
     )
     {
+        Workspace = workspace;
+        WorkspaceId = workspace.Id;
+        
+        Order = order;
+        OrderId = order.Id;
+        
         if (product is not null)
         {
             UpdateProduct(product, quantity);;
-        }
-
-        if (order is not null)
-        {
-            Order = order;
-            OrderId = order.Id;
         }
         
         //ValidateEntity();
@@ -41,12 +42,12 @@ public class OrderItem : BaseEntity<OrderItem>
     /// Product name
     /// </summary>
     public string ProductName { get; private set; }
-    
+
     /// <summary>
     /// Product unit price
     /// </summary>
     public decimal ProductUnitPrice { get; private set; }
-    
+
     /// <summary>
     /// Quantity
     /// </summary>
@@ -55,9 +56,29 @@ public class OrderItem : BaseEntity<OrderItem>
     /// <summary>
     /// Total price
     /// </summary>
-    public decimal TotalPrice { get; private set; }
+    public decimal TotalPrice {
+        get
+        {
+            return ProductUnitPrice * Quantity;
+        }
+        private set
+        {
+            
+        }
+    }
     
     #region Navigation Properties
+    
+    
+    /// <summary>
+    /// Navigation property for linking to Workspace
+    /// </summary>
+    public Workspace Workspace { get; private set; }
+    
+    /// <summary>
+    /// Navigation property for linking to Workspace
+    /// </summary>
+    public Guid WorkspaceId { get; private set; }
     
     /// <summary>
     /// Navigation property for linking to Order
@@ -84,20 +105,6 @@ public class OrderItem : BaseEntity<OrderItem>
     #endregion
     
     #region Methods
-
-    public void SetOrder(Order order)
-    {
-        if (order == null)
-        {
-            throw new ArgumentException("Order cannot be empty.");
-        };
-        
-        Order = order;
-        OrderId = order.Id;
-        
-        //ValidateEntity();
-        //AddDomainEvent();
-    }
     
     /// <summary>
     /// Method for setting or updating Product of OrderItem.
@@ -115,7 +122,7 @@ public class OrderItem : BaseEntity<OrderItem>
         Product = product;
         ProductId = product.Id;
             
-        ProductName = product.Name;
+        ProductName = product.Name ?? string.Empty;
         ProductUnitPrice = product.UnitPrice;
         Quantity = quantity;
         
@@ -157,6 +164,20 @@ public class OrderItem : BaseEntity<OrderItem>
         {
             TotalPrice = ProductUnitPrice * Quantity;
         }
+        
+        //ValidateEntity();
+        //AddDomainEvent();
+    }
+
+    public void SetProduct(Product product)
+    {
+        if (product is null)
+        {
+            throw new ArgumentException("Product cannot be empty.");
+        }
+        
+        Product = product;
+        ProductId = product.Id;
         
         //ValidateEntity();
         //AddDomainEvent();

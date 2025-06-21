@@ -28,40 +28,30 @@ public class Order : BaseEntity<Order>
     /// <param name="shippingAddress">Shipping address</param>
     /// <param name="shippingCost">Shipping cost</param>
     /// <param name="description">Description</param>
-    /// <param name="deadline">Close date</param>
     public Order(
-        Workspace workspace, 
-        List<OrderItem> orderItems,
+        Workspace workspace,
+        List<OrderItem>? orderItems,
         Customer? customer,
         ShippingAddress? shippingAddress,
         decimal? shippingCost,
-        string description,
-        DateTime closeDate
-        )
+        string description
+    )
     {
         Workspace = workspace;
         WorkspaceId = workspace.Id;
-        
+
         if (customer is not null)
         {
             Customer = customer;
             CustomerId = customer.Id;
         }
-        
-        OrderItems = orderItems;
+
+        OrderItems = orderItems ?? new List<OrderItem>();
         ShippingAddress = shippingAddress ?? null;
         ShippingCost = shippingCost ?? 0;
         Description = description;
         
-        foreach (var orderItem in orderItems)
-        {
-            TotalAmount += orderItem.TotalPrice;
-        }
-        
-        
-        TotalAmount += shippingCost ?? 0;
-
-        SetOrderDeadline(closeDate);
+        Status = Status.Pending;
         
         // Validation
         ValidateEntity(new OrderValidator());
@@ -76,8 +66,11 @@ public class Order : BaseEntity<Order>
     /// <summary>
     /// Total deal value
     /// </summary>
-    public decimal TotalAmount { get; private set; } = 0;
-    
+    public decimal TotalAmount
+    {
+        get { return OrderItems.Sum(oi => oi.TotalPrice) + ShippingCost; }
+    }
+
     /// <summary>
     /// Shipping cost
     /// </summary>
@@ -88,11 +81,8 @@ public class Order : BaseEntity<Order>
     /// </summary>
     public string Description { get; private set; }
     
-    /// <summary>
-    /// CloseDate
-    /// </summary>
-    public DateTime CloseDate { get; private set; }
-    
+    public Status Status { get; private set; }
+
     #region Navigation Properties
     
     /// <summary>
@@ -131,11 +121,51 @@ public class Order : BaseEntity<Order>
     
     #region Methods
     
-    public void SetOrderDeadline(DateTime closeDate)
+    public void UpdateCustomer(Customer customer)
     {
-        if (closeDate < DateTime.UtcNow) throw new ArgumentException("Order date cannot be earlier than today.");
+        if (customer is null)
+        {
+            throw new ArgumentException("Customer cannot be empty.");
+        };
         
-        CloseDate = closeDate;
+        Customer = customer;
+        CustomerId = customer.Id;
+        
+        //ValidateEntity();
+    }
+
+    public void ChangeStatus(Status status)
+    {
+        if (status is null)
+        {
+            throw new ArgumentException("Status cannot be empty.");
+        };
+        
+        Status = status;
+        
+        //ValidateEntity();
+    }
+
+    public void AddOrderItem(OrderItem orderItem)
+    {
+        if (orderItem is null)
+        {
+            throw new ArgumentNullException(nameof(orderItem));
+        }
+        
+        OrderItems.Add(orderItem);
+        
+        //ValidateEntity();
+    }
+    
+    public void RemoveOrderItem(OrderItem orderItem)
+    {
+        if (orderItem is null)
+        {
+            throw new ArgumentNullException(nameof(orderItem));
+        }
+        
+        OrderItems.Remove(orderItem);
     }
     
     #endregion

@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using Application.UseCases.Orders.Commands.DTOs;
-using Application.UseCases.Orders.Commands.Requests;
+using Application.UseCases.Orders.DTOs;
+using Application.UseCases.Orders.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

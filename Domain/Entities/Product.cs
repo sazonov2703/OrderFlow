@@ -72,11 +72,6 @@ public class Product : BaseEntity<Product>
     #region Navigation Properties
 
     /// <summary>
-    /// Navigation property for linking to OrderItems
-    /// </summary>
-    public List<OrderItem> OrderItems { get; private set; } = new List<OrderItem>();
-    
-    /// <summary>
     /// Navigation property for linking to Workspace
     /// </summary>
     public Workspace Workspace { get; private set; }
@@ -85,6 +80,11 @@ public class Product : BaseEntity<Product>
     /// Navigation property for linking to Workspace
     /// </summary>
     public Guid WorkspaceId { get; private set; }
+    
+    /// <summary>
+    /// Navigation property for linking to OrderItems
+    /// </summary>
+    public List<OrderItem> OrderItems { get; private set; } = new List<OrderItem>();
 
     #endregion
     
@@ -92,15 +92,7 @@ public class Product : BaseEntity<Product>
     
     #region Methods
 
-    public void AddToOrderItem(OrderItem orderItem)
-    {
-        if (orderItem is null)
-        {
-            throw new ArgumentNullException(nameof(orderItem));
-        }
-        
-        OrderItems.Add(orderItem);
-    }
+    
     
     #endregion
 }

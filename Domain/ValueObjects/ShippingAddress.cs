@@ -6,7 +6,6 @@ public class ShippingAddress : BaseValueObject
 {
     #region Constructors
     
-    
     public ShippingAddress(
         string? recipentName, 
         string? country, 

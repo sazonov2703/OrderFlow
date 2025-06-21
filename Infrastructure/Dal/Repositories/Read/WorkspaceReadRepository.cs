@@ -14,12 +14,15 @@ public class WorkspaceReadRepository: BaseReadRepository<Workspace>, IWorkspaceR
     public async Task<List<Workspace>> GetByUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         var user = await _context.Users
-            .Include(u => u.Workspaces)
+            .Include(u => u.UserWorkspaces)
+            .ThenInclude(uw => uw.Workspace)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         if (user == null)
             throw new KeyNotFoundException($"User with id {userId} not found");
 
-        return user.Workspaces.ToList();
+        return user.UserWorkspaces
+            .Select(uw => uw.Workspace)
+            .ToList();
     }
 }
