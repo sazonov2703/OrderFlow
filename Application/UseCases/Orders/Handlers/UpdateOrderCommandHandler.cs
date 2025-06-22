@@ -1,4 +1,3 @@
-using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
 using Application.Services.Customers;
 using Application.Services.OrderItems;
@@ -27,7 +26,8 @@ public class UpdateOrderCommandHandler(
             request.UserId, dto.WorkspaceId, cancellationToken);
         
         // Get and validate the order
-        var order = await orderAccessService.GetAndValidateOrderById(workspace.Id, dto.OrderId, cancellationToken);
+        var order = await orderAccessService.GetAndValidateOrderById(
+            workspace.Id, dto.OrderId, cancellationToken);
 
         // Get or create the customer
         var customer = await customerResolverService.GetOrCreateCustomerAsync(
@@ -44,7 +44,6 @@ public class UpdateOrderCommandHandler(
         foreach (var orderItemDto in dto.OrderItems)
         {
             await orderItemBuilderService.BuildOrderItemAndAttachToOrderAsync(
-                workspace, 
                 order, 
                 orderItemDto.ProductId, 
                 orderItemDto.ProductName, 

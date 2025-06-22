@@ -10,9 +10,9 @@ public class Product : BaseEntity<Product>
     /// <summary>
     /// Empty constructor for EF Core
     /// </summary>
-    private Product(List<OrderItem> orderItems)
+    private Product()
     {
-        OrderItems = orderItems;
+        
     }
 
     /// <summary>

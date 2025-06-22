@@ -15,7 +15,7 @@ public class UserWorkspaceConfiguration : IEntityTypeConfiguration<UserWorkspace
         builder.HasOne(uw => uw.User)
             .WithMany(u => u.UserWorkspaces)
             .HasForeignKey(uw => uw.UserId);
-        
+
         builder.HasOne(uw => uw.Workspace)
             .WithMany(w => w.UserWorkspaces)
             .HasForeignKey(uw => uw.WorkspaceId);

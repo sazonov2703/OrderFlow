@@ -13,22 +13,15 @@ public class OrderItem : BaseEntity<OrderItem>
     }
 
     public OrderItem(
-        Workspace workspace, 
-        Product? product,
+        Product product,
         Order order,
         int quantity
     )
     {
-        Workspace = workspace;
-        WorkspaceId = workspace.Id;
-        
-        Order = order;
+        Order = order ?? throw new ArgumentNullException(nameof(order));;
         OrderId = order.Id;
         
-        if (product is not null)
-        {
-            UpdateProduct(product, quantity);;
-        }
+        SetProduct(product, quantity);
         
         //ValidateEntity();
         //AddDomainEvent();
@@ -69,17 +62,6 @@ public class OrderItem : BaseEntity<OrderItem>
     
     #region Navigation Properties
     
-    
-    /// <summary>
-    /// Navigation property for linking to Workspace
-    /// </summary>
-    public Workspace Workspace { get; private set; }
-    
-    /// <summary>
-    /// Navigation property for linking to Workspace
-    /// </summary>
-    public Guid WorkspaceId { get; private set; }
-    
     /// <summary>
     /// Navigation property for linking to Order
     /// </summary>
@@ -112,12 +94,12 @@ public class OrderItem : BaseEntity<OrderItem>
     /// <param name="product">Product</param>
     /// <param name="quantity">Quantity</param>
     /// <exception cref="ArgumentException">Product cannot be empty.</exception>
-    public void UpdateProduct(Product product, int quantity)
+    public void SetProduct(Product product, int quantity)
     {
         if (product == null)
         {
             throw new ArgumentException("Product cannot be empty.");
-        };
+        }
         
         Product = product;
         ProductId = product.Id;
@@ -125,8 +107,6 @@ public class OrderItem : BaseEntity<OrderItem>
         ProductName = product.Name ?? string.Empty;
         ProductUnitPrice = product.UnitPrice;
         Quantity = quantity;
-        
-        TotalPrice = ProductUnitPrice * Quantity;
         
         //ValidateEntity();
         //AddDomainEvent();
@@ -142,7 +122,7 @@ public class OrderItem : BaseEntity<OrderItem>
     {
         if (productName is null && productUnitPrice is null && quantity is null)
         {
-            throw new ArgumentException("At least one field must be updated.");
+            throw new ArgumentNullException("At least one field must be updated.");
         }
         
         if (productName is not null)
@@ -159,25 +139,6 @@ public class OrderItem : BaseEntity<OrderItem>
         {
             Quantity = (int)quantity;
         }
-        
-        if (productUnitPrice is not null || quantity is not null)
-        {
-            TotalPrice = ProductUnitPrice * Quantity;
-        }
-        
-        //ValidateEntity();
-        //AddDomainEvent();
-    }
-
-    public void SetProduct(Product product)
-    {
-        if (product is null)
-        {
-            throw new ArgumentException("Product cannot be empty.");
-        }
-        
-        Product = product;
-        ProductId = product.Id;
         
         //ValidateEntity();
         //AddDomainEvent();

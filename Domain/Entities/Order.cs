@@ -34,10 +34,10 @@ public class Order : BaseEntity<Order>
         Customer? customer,
         ShippingAddress? shippingAddress,
         decimal? shippingCost,
-        string description
+        string? description
     )
     {
-        Workspace = workspace;
+        Workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));
         WorkspaceId = workspace.Id;
 
         if (customer is not null)
@@ -46,11 +46,19 @@ public class Order : BaseEntity<Order>
             CustomerId = customer.Id;
         }
 
-        OrderItems = orderItems ?? new List<OrderItem>();
+        OrderItems = new();
+        if (orderItems != null)
+        {
+            foreach (var orderItem in orderItems)
+            {
+                AddOrderItem(orderItem);
+            }
+        }
+        
         ShippingAddress = shippingAddress ?? null;
         ShippingCost = shippingCost ?? 0;
-        Description = description;
-        
+        Description = description ?? string.Empty;
+
         Status = Status.Pending;
         
         // Validation
@@ -81,6 +89,9 @@ public class Order : BaseEntity<Order>
     /// </summary>
     public string Description { get; private set; }
     
+    /// <summary>
+    /// Status
+    /// </summary>
     public Status Status { get; private set; }
 
     #region Navigation Properties
@@ -161,6 +172,13 @@ public class Order : BaseEntity<Order>
         //ValidateEntity();
         //AddDomainEvent();
     }
-    
+
+    public void UpdateStatus(Status status)
+    {
+        Status = status;
+        
+        //ValidateEntity();
+        //AddDomainEvent();
+    }
     #endregion
 }

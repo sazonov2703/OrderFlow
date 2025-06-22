@@ -82,15 +82,29 @@ public class Workspace : BaseEntity<Workspace>
         if (UserWorkspaces.Any(uw => uw.UserId == user.Id))
             throw new ArgumentException($"User {nameof(user)} already exists.");
         
-        UserWorkspaces.Add(new UserWorkspace
-        {
-            User = user, 
-            Workspace = this 
-            
-        });
+        UserWorkspaces.Add(new UserWorkspace(user, this));
         
         // ValidateEntity();
         AddDomainEvent(new AddUserToWorkspaceEvent());
+    }
+    
+    public void RemoveUser(User user)
+    {
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+        
+        var userWorkspace = UserWorkspaces.FirstOrDefault(uw => uw.UserId == user.Id);
+        
+        if (userWorkspace is null)
+        {
+            throw new ArgumentException($"User {nameof(user)} does not exist.");
+        }
+        
+        UserWorkspaces.Remove(userWorkspace);
+        
+        AddDomainEvent(new UserRemovedFromWorkspaceEvent());
     }
     
     #endregion

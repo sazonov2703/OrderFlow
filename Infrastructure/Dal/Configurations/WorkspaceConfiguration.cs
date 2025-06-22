@@ -17,8 +17,25 @@ public class WorkspaceConfiguration : IEntityTypeConfiguration<Workspace>
             .IsRequired()
             .HasMaxLength(25);
 
+        
         builder.HasMany(w => w.UserWorkspaces)
             .WithOne(uw => uw.Workspace)
-            .HasForeignKey(uw => uw.WorkspaceId);
+            .HasForeignKey(uw => uw.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(w => w.Customers)
+            .WithOne(c => c.Workspace)
+            .HasForeignKey(c => c.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(w => w.Products)
+            .WithOne(p => p.Workspace)
+            .HasForeignKey(p => p.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(w => w.Orders)
+            .WithOne(o => o.Workspace)
+            .HasForeignKey(o => o.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -40,7 +40,6 @@ public class CreateOrderCommandHandler(
         foreach (var orderItemDto in dto.OrderItems)
         {
             await orderItemBuilderService.BuildOrderItemAndAttachToOrderAsync(
-                workspace, 
                 order, 
                 orderItemDto.ProductId, 
                 orderItemDto.ProductName, 
@@ -57,6 +56,7 @@ public class CreateOrderCommandHandler(
         // Save the changes
         await orderWriteRepository.SaveChangesAsync(cancellationToken);
         
+        // Return the order id
         return order.Id;
     }
 }

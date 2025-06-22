@@ -29,7 +29,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.UserWorkspaces)
             .WithOne(uw => uw.User)
             .HasForeignKey(uw => uw.UserId)
-            
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

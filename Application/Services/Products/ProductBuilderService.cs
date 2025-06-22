@@ -14,26 +14,34 @@ public class ProductBuilderService(
         Guid? productId, 
         string? name, 
         string? description,
-        decimal unitPrice, 
+        decimal? unitPrice, 
         string? imageUrl, 
         CancellationToken cancellationToken)
     {
-        Product product;
-        
         if (productId is { } id && id != Guid.Empty)
         {
             return await productAccessService.GetAndValidateProductByIdAsync(id, workspace.Id, cancellationToken);
         }
         
         var existingProduct = await productReadRepository.GetByCompositeFieldsAsync(
-            workspace.Id, name, description, unitPrice, imageUrl, cancellationToken);
+            workspace.Id, 
+            name ?? string.Empty, 
+            description ?? string.Empty, 
+            unitPrice ?? 0, 
+            imageUrl ?? string.Empty, 
+            cancellationToken);
 
         if (existingProduct != null)
         {
             return existingProduct;
         }
         
-        product = new Product(workspace, name, description, unitPrice, imageUrl);
+        var product = new Product(
+            workspace, 
+            name ?? string.Empty, 
+            description ?? string.Empty, 
+            unitPrice ?? 0, 
+            imageUrl ?? string.Empty);
 
         await productWriteRepository.AddAsync(product, cancellationToken);
         

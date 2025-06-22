@@ -10,7 +10,7 @@ namespace Infrastructure.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IMediator mediator) : Controller
+public class AuthController(IMediator mediator) : BaseController
 {
     [HttpPost("register")]
     [AllowAnonymous]

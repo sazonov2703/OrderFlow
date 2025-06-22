@@ -35,7 +35,7 @@ public class Customer : BaseEntity<Customer>
         List<string>? links
         )
     {
-        Workspace = workspace;
+        Workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));;
         WorkspaceId = workspace.Id;
         FirstName = firstName;
         LastName = lastName;

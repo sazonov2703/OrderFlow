@@ -27,8 +27,8 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.Property(oi => oi.TotalPrice)
             .HasColumnName(nameof(OrderItem.TotalPrice))
             .IsRequired();
-        
-        
+
+
         builder.HasOne(oi => oi.Product)
             .WithMany(p => p.OrderItems)
             .HasForeignKey(oi => oi.ProductId);

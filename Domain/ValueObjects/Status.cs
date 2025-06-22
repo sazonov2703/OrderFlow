@@ -21,6 +21,6 @@ public class Status : BaseValueObject
     public static Status FromName(string name)
     {
         return List().FirstOrDefault(s => s.Name == name) 
-               ?? throw new ArgumentException($"Неверный статус: {name}");
+               ?? throw new ArgumentException($"Invalid status name: {name}");
     }
 }
