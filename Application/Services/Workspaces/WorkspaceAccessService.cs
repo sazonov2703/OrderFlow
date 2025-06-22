@@ -3,7 +3,9 @@ using Domain.Entities;
 
 namespace Application.Services.Workspaces;
 
-public class WorkspaceAccessService(IUserReadRepository userReadRepository, IWorkspaceReadRepository workspaceReadRepository)
+public class WorkspaceAccessService(
+    IUserReadRepository userReadRepository, 
+    IWorkspaceReadRepository workspaceReadRepository)
 {
     public async Task<Workspace> GetAndValidateWorkspaceById(
         Guid userId, Guid workspaceId, CancellationToken cancellationToken)

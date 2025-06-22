@@ -121,31 +121,6 @@ public class Order : BaseEntity<Order>
     
     #region Methods
     
-    public void UpdateCustomer(Customer customer)
-    {
-        if (customer is null)
-        {
-            throw new ArgumentException("Customer cannot be empty.");
-        };
-        
-        Customer = customer;
-        CustomerId = customer.Id;
-        
-        //ValidateEntity();
-    }
-
-    public void ChangeStatus(Status status)
-    {
-        if (status is null)
-        {
-            throw new ArgumentException("Status cannot be empty.");
-        };
-        
-        Status = status;
-        
-        //ValidateEntity();
-    }
-
     public void AddOrderItem(OrderItem orderItem)
     {
         if (orderItem is null)
@@ -158,14 +133,33 @@ public class Order : BaseEntity<Order>
         //ValidateEntity();
     }
     
-    public void RemoveOrderItem(OrderItem orderItem)
+    public void ClearOrderItems()
     {
-        if (orderItem is null)
-        {
-            throw new ArgumentNullException(nameof(orderItem));
-        }
+        OrderItems.Clear();
         
-        OrderItems.Remove(orderItem);
+        //ValidateEntity();
+    }
+
+    public void Update(
+        Customer? customer = null,
+        ShippingAddress? shippingAddress = null,
+        decimal? shippingCost = null,
+        string? description = null)
+    {
+        if (customer != null)
+            Customer = customer;
+    
+        if (shippingAddress != null)
+            ShippingAddress = shippingAddress;
+    
+        if (shippingCost.HasValue)
+            ShippingCost = shippingCost.Value;
+    
+        if (!string.IsNullOrEmpty(description))
+            Description = description;
+        
+        //ValidateEntity();
+        //AddDomainEvent();
     }
     
     #endregion

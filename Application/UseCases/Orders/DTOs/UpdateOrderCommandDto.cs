@@ -1,7 +1,8 @@
 namespace Application.UseCases.Orders.DTOs;
 
-public record CreateOrderCommandDto(
+public record UpdateOrderCommandDto(
     Guid WorkspaceId,
+    Guid OrderId,
     
     List<OrderItemDto> OrderItems,
     
@@ -23,4 +24,4 @@ public record CreateOrderCommandDto(
         
     decimal ShippingCost,
     string Description
-    );
+);

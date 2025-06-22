@@ -1,44 +1,36 @@
-using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
-using Application.UseCases.Orders.DTOs;
+using Application.Services.Products;
 using Domain.Entities;
 
 namespace Application.Services.OrderItems;
 
 public class OrderItemBuilderService(
-    IProductReadRepository productReadRepository,
-    IProductWriteRepository productWriteRepository,
+    ProductBuilderService productBuilderService,
     IOrderItemWriteRepository orderItemWriteRepository)
 {
-    public async Task BuildOrderItemsAndAttachToOrderAsync(
-        Workspace workspace, Order order, List<OrderItemDto> orderItemDtos, CancellationToken cancellationToken)
+    public async Task BuildOrderItemAndAttachToOrderAsync(Workspace workspace,
+        Order order,
+        Guid? productId,
+        string name,
+        decimal unitPrice,
+        string description,
+        string? imageUrl,
+        int quantity,
+        CancellationToken cancellationToken)
     {
-        foreach (var dto in orderItemDtos)
-        {
-            Product product;
+        var product = await productBuilderService.GetOrCreateProduct(
+            workspace,
+            productId ?? Guid.Empty,
+            name,
+            description,
+            unitPrice,
+            imageUrl,
+            cancellationToken);
 
-            if (dto.ProductId is { } productId && productId != Guid.Empty)
-            {
-                product = await productReadRepository.GetByIdAsync(productId, cancellationToken)
-                          ?? throw new InvalidOperationException($"Product {productId} does not exist");
-            }
-            else
-            {
-                product = new Product(
-                    workspace,
-                    dto.ProductName,
-                    dto.ProductDescription,
-                    dto.ProductUnitPrice,
-                    dto.ProductImageUrl);
+        var orderItem = new OrderItem(workspace, product, order, quantity);
+        orderItem.UpdateFields(name, unitPrice, quantity);
 
-                await productWriteRepository.AddAsync(product, cancellationToken);
-            }
-
-            var orderItem = new OrderItem(workspace, product, order, dto.Quantity);
-            orderItem.UpdateFields(dto.ProductName, dto.ProductUnitPrice, dto.Quantity);
-
-            await orderItemWriteRepository.AddAsync(orderItem, cancellationToken);
-            order.AddOrderItem(orderItem);
-        }
+        order.AddOrderItem(orderItem);
+        await orderItemWriteRepository.AddAsync(orderItem, cancellationToken);
     }
 }
