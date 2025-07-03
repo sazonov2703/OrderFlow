@@ -23,16 +23,16 @@ public class Customer : BaseEntity<Customer>
     /// <param name="lastName">Last name</param>
     /// <param name="patronymic">Patronymic</param>
     /// <param name="email">Email</param>
-    /// <param name="phoneNumbers">Phone numbers</param>
-    /// <param name="links">Links</param>
+    /// <param name="phoneNumber">Phone number</param>
+    /// <param name="link">Link</param>
     public Customer(
         Workspace workspace,
         string? firstName,
         string? lastName,
         string? patronymic,
         string? email,
-        List<string>? phoneNumbers,
-        List<string>? links
+        string? phoneNumber,
+        string? link
         )
     {
         Workspace = workspace ?? throw new ArgumentNullException(nameof(workspace));;
@@ -41,8 +41,8 @@ public class Customer : BaseEntity<Customer>
         LastName = lastName;
         Patronymic = patronymic;
         Email = email;
-        PhoneNumbers = phoneNumbers;
-        Links = links;
+        PhoneNumber = phoneNumber;
+        Link = link;
         
         // Validation
         ValidateEntity(new CustomerValidator());
@@ -76,14 +76,14 @@ public class Customer : BaseEntity<Customer>
     public string? Email { get; private set; }
     
     /// <summary>
-    /// Phone numbers
+    /// Phone number
     /// </summary>
-    public List<string>? PhoneNumbers { get; private set; }
+    public string? PhoneNumber { get; private set; }
     
     /// <summary>
-    /// Links to social media
+    /// Link to social media
     /// </summary>
-    public List<string>? Links { get; private set; }
+    public string Link { get; private set; }
 
     #region Navigation Properties
 

@@ -1,5 +1,5 @@
- using Application.UseCases.Workspaces.DTOs;
- using Application.UseCases.Workspaces.Requests;
+ using Application.DTOs;
+ using Application.UseCases.Commands.Requests;
  using MediatR;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;

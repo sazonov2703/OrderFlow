@@ -16,9 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="UseCases\OrderItems\DTOs\" />
-      <Folder Include="UseCases\OrderItems\Handlers\" />
-      <Folder Include="UseCases\OrderItems\Requests\" />
+      <Folder Include="UseCases\Commands\" />
+      <Folder Include="UseCases\Quiaries\" />
     </ItemGroup>
 
 </Project>

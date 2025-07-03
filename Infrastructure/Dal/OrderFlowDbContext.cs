@@ -20,10 +20,12 @@ public class OrderFlowDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("", (options) =>
-        {
-            options.CommandTimeout(10);
-        });
+        optionsBuilder.UseNpgsql(
+            "Host=localhost;Port=5432;Database=OrderFlowDb;Username=postgres;Password=postgres",
+            (options) =>
+            {
+                options.CommandTimeout(10);
+            });
         
     }
 

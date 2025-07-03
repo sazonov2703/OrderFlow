@@ -19,12 +19,12 @@ public class JwtProvider(IConfiguration configuration) : IJwtProvider
             new Claim(ClaimTypes.Name, user.Username)
         };
             
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         
         var token = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"],
-            audience: configuration["Jwt:Audience"],
+            issuer: configuration["JwtSettings:Issuer"],
+            audience: configuration["JwtSettings:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(int.Parse(configuration["JwtSettings:ExpirationInMinutes"]!)),
             signingCredentials: creds);

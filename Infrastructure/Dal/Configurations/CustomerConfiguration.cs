@@ -28,24 +28,13 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasColumnName(nameof(Customer.Email))
             .HasMaxLength(100);
         
-        
-        builder.OwnsMany(c => c.PhoneNumbers, b =>
-        {
-            b.ToTable("CustomerPhoneNumbers");
-            b.WithOwner().HasForeignKey("CustomerId");
+        builder.Property(c => c.PhoneNumber)
+            .HasColumnName(nameof(Customer.PhoneNumber))
+            .HasMaxLength(25);
 
-            b.Property(p => p).HasColumnName("PhoneNumber");
-            b.HasKey("CustomerId", "PhoneNumber");
-        });
-
-        builder.OwnsMany(c => c.Links, b =>
-        {
-            b.ToTable("CustomerLinks");
-            b.WithOwner().HasForeignKey("CustomerId");
-
-            b.Property(l => l).HasColumnName("Link");
-            b.HasKey("CustomerId", "Link");
-        });
+        builder.Property(c => c.Link)
+            .HasColumnName(nameof(Customer.Link))
+            .HasMaxLength(255);
         
         
         builder.HasOne(c => c.Workspace)

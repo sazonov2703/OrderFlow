@@ -15,8 +15,8 @@ public class CustomerBuilderService(
         string? lastName, 
         string? patronymic,
         string? email, 
-        List<string>? phoneNumbers, 
-        List<string>? links, 
+        string? phoneNumber, 
+        string? link, 
         CancellationToken cancellationToken)
     {
         Customer customer;
@@ -28,7 +28,7 @@ public class CustomerBuilderService(
         else
         {
             customer = new Customer(
-                workspace, firstName, lastName, patronymic, email, phoneNumbers, links);
+                workspace, firstName, lastName, patronymic, email, phoneNumber, link);
             
             await customerWriteRepository.AddAsync(customer, cancellationToken);
         }

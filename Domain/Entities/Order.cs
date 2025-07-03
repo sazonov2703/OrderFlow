@@ -77,6 +77,7 @@ public class Order : BaseEntity<Order>
     public decimal TotalAmount
     {
         get { return OrderItems.Sum(oi => oi.TotalPrice) + ShippingCost; }
+        private set { } 
     }
 
     /// <summary>
