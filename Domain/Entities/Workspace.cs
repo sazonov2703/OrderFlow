@@ -1,5 +1,6 @@
 using Domain.Events;
 using Domain.Validators;
+using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
@@ -29,7 +30,7 @@ public class Workspace : BaseEntity<Workspace>
         )
     {
         Name = name;
-        AddUser(user);
+        AddUser(user, WorkspaceRole.Owner);
         
         // Validation
         ValidateEntity(new WorkspaceValidator());
@@ -75,14 +76,14 @@ public class Workspace : BaseEntity<Workspace>
     
     #region Methods
 
-    public void AddUser(User user)
+    public void AddUser(User user, WorkspaceRole? role)
     {
         if (user is null) throw new ArgumentNullException(nameof(user));
 
         if (UserWorkspaces.Any(uw => uw.UserId == user.Id))
             throw new ArgumentException($"User {nameof(user)} already exists.");
         
-        UserWorkspaces.Add(new UserWorkspace(user, this));
+        UserWorkspaces.Add(new UserWorkspace(user, this, role));
         
         // ValidateEntity();
         AddDomainEvent(new AddUserToWorkspaceEvent());

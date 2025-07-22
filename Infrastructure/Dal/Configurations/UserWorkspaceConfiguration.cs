@@ -12,6 +12,10 @@ public class UserWorkspaceConfiguration : IEntityTypeConfiguration<UserWorkspace
         
         builder.HasKey(uw => new { uw.UserId, uw.WorkspaceId });
         
+        builder.Property(uw => uw.Role)
+            .HasColumnName(nameof(UserWorkspace.Role))
+            .IsRequired();
+        
         builder.HasOne(uw => uw.User)
             .WithMany(u => u.UserWorkspaces)
             .HasForeignKey(uw => uw.UserId);

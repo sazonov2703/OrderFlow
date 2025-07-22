@@ -2,6 +2,7 @@ using Application.Interfaces.Repositories.Read;
 using Application.Interfaces.Repositories.Write;
 using Application.UseCases.Commands.Requests;
 using Domain.Entities;
+using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.UseCases.Commands.Handlers;

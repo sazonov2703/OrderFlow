@@ -1,3 +1,5 @@
+using Domain.Validators;
+
 namespace Domain.Entities;
 
 public class ExternalLogin : BaseEntity<ExternalLogin>
@@ -29,7 +31,7 @@ public class ExternalLogin : BaseEntity<ExternalLogin>
         Provider = provider;
         ExternalUserId = externalUserId;
 
-        //ValidateEntity();
+        ValidateEntity(new ExternalLoginValidator());
         //AddDomainEvent();
     }
     

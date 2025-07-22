@@ -22,7 +22,32 @@
          
          return Ok(result);
      }
- 
+
+     [HttpPost("addUser")]
+     public async Task<IActionResult> AddUser(
+         [FromBody] AddUserToWorkspaceByUsernameCommandDto addUserToWorkspaceByUsernameCommandDto,
+         CancellationToken cancellationToken)
+     {
+         var result = await mediator.Send(
+             new AddUserToWorkspaceByUsernameCommand(UserId, addUserToWorkspaceByUsernameCommandDto),
+             cancellationToken
+         );
+         
+         return Ok(result);
+     }
+     
+     [HttpDelete("deleteUser")]
+     public async Task<IActionResult> DeleteUser(
+         DeleteUserFromWorkspaceByUsernameCommandDto addUserToWorkspaceByUsernameCommandDto,
+         CancellationToken cancellationToken)
+     {
+         var result = await mediator.Send(
+             new DeleteUserFromWorkspaceByUsernameCommand(UserId, addUserToWorkspaceByUsernameCommandDto), 
+             cancellationToken);
+         
+         return Ok(result);
+     } 
+     
      [HttpDelete("delete")]
      public async Task<IActionResult> DeleteWorkspace(Guid workspaceId, CancellationToken cancellationToken)
      {

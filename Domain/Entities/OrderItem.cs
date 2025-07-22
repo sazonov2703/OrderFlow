@@ -1,3 +1,5 @@
+using Domain.Validators;
+
 namespace Domain.Entities;
 
 public class OrderItem : BaseEntity<OrderItem>
@@ -108,7 +110,7 @@ public class OrderItem : BaseEntity<OrderItem>
         ProductUnitPrice = product.UnitPrice;
         Quantity = quantity;
         
-        //ValidateEntity();
+        ValidateEntity(new OrderItemValidator());
         //AddDomainEvent();
     }
 
@@ -140,7 +142,7 @@ public class OrderItem : BaseEntity<OrderItem>
             Quantity = (int)quantity;
         }
         
-        //ValidateEntity();
+        ValidateEntity(new OrderItemValidator());
         //AddDomainEvent();
     }
     
