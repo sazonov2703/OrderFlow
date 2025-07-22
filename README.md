@@ -1,81 +1,75 @@
-# 🚀 OrderFlow
+# 🚀 OrderFlow  
 
----
+---  
 
-Сервис-органайзер для микробизнеса, который помогает вести учёт продаж, клиентов, продуктов и других важных данных в одном месте — без необходимости использовать Excel или блокноты.
+A service organizer for small businesses that helps track sales, customers, products, and other important data in one place—eliminating the need for Excel or notebooks.  
 
-В текущей версии реализовано API, в будущем планируется добавить фронтенд для удобного взаимодействия.
+The current version includes an API, with plans to add a frontend for a user-friendly interface in the future.  
 
----
+---  
 
-## 🧩 Основные возможности
+## 🧩 Key Features  
 
-- Управление клиентами (CRUD операции)
-- Управление продуктами и товарами
-- Учёт продаж
-- Чёткое разделение ответственности благодаря архитектуре и CQRS
-- RESTful API для взаимодействия с внешними клиентами и будущим фронтендом
+- Customer management (CRUD operations)  
+- Product and inventory management  
+- Sales tracking  
+- Clear separation of responsibilities thanks to Clean Architecture and CQRS  
+- RESTful API for integration with external clients and future frontend  
 
----
+---  
 
-## 🧱 Архитектура и подходы
+## 🧱 Architecture & Approaches  
 
-- **Чистая архитектура (Clean Architecture)** — код разделён на слои: презентационный(в будущем), бизнес-логики (прикладной), доменный, и инфраструктурный. Это упрощает поддержку, тестируемость и гибкость.
-- **CQRS (Command Query Responsibility Segregation)** — команды (изменения состояния) и запросы (чтение данных) разделены, что улучшает масштабируемость и упрощает управление.
-- **Entity Framework Core** — для работы с базой данных с поддержкой миграций и ORM.
-- **REST API** — взаимодействие с клиентами через HTTP с использованием JSON.
-- **Dependency Injection** — для инверсии зависимостей и облегчения тестирования.
-- **Автоматическое логирование и обработка ошибок** — для удобства поддержки и мониторинга.
+- **Clean Architecture** – Code is divided into layers: presentation (future), application (business logic), domain, and infrastructure. This improves maintainability, testability, and flexibility.  
+- **CQRS (Command Query Responsibility Segregation)** – Commands (state changes) and queries (data reads) are separated, enhancing scalability and simplifying management.  
+- **Entity Framework Core** – Database operations with migration support and ORM.  
+- **REST API** – Client interaction via HTTP using JSON.  
+- **Dependency Injection** – For dependency inversion and easier testing.  
+- **Automatic logging & error handling** – Simplifies maintenance and monitoring.  
 
----
+---  
 
-## 🛠 Технологии
+## 🛠 Technologies  
 
-- C# / .NET 8
-- Entity Framework Core
-- ASP.NET Core Web API
-- MediatR (или аналог) для реализации CQRS
-- Swagger / OpenAPI для документирования API
-- SQL Server / PostgreSQL (конфигурируемо)
+- C# / .NET 8  
+- Entity Framework Core  
+- ASP.NET Core Web API  
+- MediatR (or equivalent) for CQRS implementation  
+- Swagger / OpenAPI for API documentation  
+- SQL Server / PostgreSQL (configurable)  
 
----
+---  
 
-## ⚙ Установка и запуск
+## ⚙ Setup & Launch  
 
-1. Клонируйте репозиторий:
-   ```
-   git clone https://github.com/sazonov2703/OrderFlow.git
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/sazonov2703/OrderFlow.git  
    cd OrderFlow
-   ```
-
-2. Настройте строку подключения к базе данных в `appsettings.json`.
-
-3. Выполните миграции базы данных:
-   ```
+   
+2. Configure the database connection string in appsettings.json.
+   
+3. Run database migrations:
+   ```bash
    dotnet ef database update
-   ```
 
-4. Запустите API:
-   ```
+4. Launch the API:
+   ```bash
    dotnet run --project src/OrderFlow.Api
-   ```
 
-5. Откройте в браузере Swagger UI по адресу:
-   ```
+5. Access Swagger UI in your browser at:
+   ```bash
    https://localhost:5001/swagger
-   ```
 
 ---
 
-
-## 📋 Планы на будущее
-
-- Разработка фронтенда на React для удобного взаимодействия
-- Расширенная аналитика и отчёты
-- Интеграция с платёжными системами и другими внешними сервисами
+## 📋 Future Plans
+- Frontend development (React) for a seamless user experience
+- Advanced analytics and reporting
+- Integration with payment systems and third-party services
 
 ---
 
-## 🌐 Вклад в развитие
+## 🌐 Contributing
 
-Если хотите помочь — создайте форк, сделайте изменения и отправьте Pull Request.  
+Want to contribute? Fork the repository, make your changes, and submit a Pull Request!
