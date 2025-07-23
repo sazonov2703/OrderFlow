@@ -1,7 +1,5 @@
 # 🚀 OrderFlow  
 
----  
-
 A service organizer for small businesses that helps track sales, customers, products, and other important data in one place—eliminating the need for Excel or notebooks.  
 
 The current version includes an API, with plans to add a frontend for a user-friendly interface in the future.  
